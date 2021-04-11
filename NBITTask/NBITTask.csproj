@@ -190,6 +190,10 @@
     <Compile Include="Migrations\202104111642215_DateTimeAddedInReview.Designer.cs">
       <DependentUpon>202104111642215_DateTimeAddedInReview.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202104111846221_RatingsAddedInProduct.cs" />
+    <Compile Include="Migrations\202104111846221_RatingsAddedInProduct.Designer.cs">
+      <DependentUpon>202104111846221_RatingsAddedInProduct.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Entities\Product.cs" />
@@ -383,6 +387,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202104111642215_DateTimeAddedInReview.resx">
       <DependentUpon>202104111642215_DateTimeAddedInReview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202104111846221_RatingsAddedInProduct.resx">
+      <DependentUpon>202104111846221_RatingsAddedInProduct.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

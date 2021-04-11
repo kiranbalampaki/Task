@@ -16,6 +16,7 @@ namespace NBITTask.Controllers
         {
             return View();
         }
+
         public ActionResult AddRating(int productRating, int productId)
         {
             Rating rating = new Rating();

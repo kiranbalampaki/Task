@@ -1,4 +1,5 @@
 ﻿using NBITTask.Models;
+using NBITTask.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,14 @@ namespace NBITTask.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
         public ActionResult Index()
         {
-            var Products = db.Products;
-            return View(Products.ToList());
+            var Products = db.Products.ToList();
+            foreach (var item in Products)
+            {
+                List<Rating> ratings = db.Rating.Where(x => x.ProductId == item.Id).ToList();
+                item.Ratings = ratings;
+            }
+
+            return View(Products);
         }
 
         public ActionResult About()

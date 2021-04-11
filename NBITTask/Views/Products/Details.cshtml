@@ -21,11 +21,28 @@
         <li class="star" value="4"><i class="fa fa-star"></i></li>
         <li class="star" value="5"><i class="fa fa-star"></i></li>
     </ul>
+
+    @{
+        var rating = ViewBag.averageRating;
+
+        for (int i = 1; i <= 5; i++)
+        {
+            if (i <= rating)
+            {
+                <i class="fa fa-star"></i>
+            }
+            else
+            {
+                <i class="fa fa-star-o"></i>
+            }
+            //rating--;
+        }
+    }
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayFor(model => model.Product.Name)
         </dt>
-        @Html.HiddenFor(model => model.Product.Id, new { @class = "productId"})
+        @Html.HiddenFor(model => model.Product.Id, new { @class = "productId" })
         <dd>
             @{
                 var base64 = Convert.ToBase64String(Model.Product.Image);

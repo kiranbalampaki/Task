@@ -40,17 +40,40 @@
                 {
                     <div class="col-4">
                         <div class="card">
+                            <div class="d-flex">
+                                @{
+                                    var averageRating = 0;
+                                    foreach (var rate in item.Ratings)
+                                    {
+                                        averageRating += rate.ProductRating;
+                                    }
+                                    var rating = averageRating;
+
+                                    for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= rating)
+                                        {
+                                            <i class="fa fa-star"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fa fa-star-o"></i>
+                                        }
+                                        //rating--;
+                                    }
+                                }
+                            </div>
                             @if (item.Image != null)
                             {
                                 var base64 = Convert.ToBase64String(item.Image);
                                 var imageSrc = String.Format("data:image/gif;base64,{0}", base64);
                                 <img src='@imageSrc' alt="" />
                             }
-                        <div class="card-body text-left">
-                            <a href="@Url.Action("Details", "Products", new { id = item.Id })" >
-                                <h5 class="card-title service-name">@item.Name</h5>
-                            </a>
-                        </div>
+                            <div class="card-body text-left">
+                                <a href="@Url.Action("Details", "Products", new { id = item.Id })">
+                                    <h5 class="card-title service-name">@item.Name</h5>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 }

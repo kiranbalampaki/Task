@@ -14,5 +14,6 @@ namespace NBITTask.Models.Entities
         [Required]
         public byte[] Image { get; set; }
         public List<Review> Reviews { get; set; }
+        public List<Rating> Ratings { get; set; }
     }
 }

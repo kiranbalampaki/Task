@@ -95,6 +95,7 @@ namespace NBITTask.Controllers
             }
 
             ViewBag.quality = quality;
+            ViewBag.averageRating = averageRating;
 
             product.Reviews = reviews;
             productReviewVM.Product = product;
