@@ -32,6 +32,7 @@ namespace NBITTask.Controllers
                 var user = db.Users.Where(m => m.Email == User.Identity.Name).FirstOrDefault();
                 review.UserId = user.Id;
                 review.User = user;
+                review.ReviewDateTime = DateTime.Now;
 
                 db.Reviews.Add(review);
                 db.SaveChanges();

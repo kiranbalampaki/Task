@@ -25,29 +25,33 @@
         {
             <div>@item.CustomerReview</div>
             <div>@item.User.Email</div>
+            <div>@item.ReviewDateTime</div>
         }
 
-        @using (Html.BeginForm("Save", "Reviews", FormMethod.Post))
+        @if (User.IsInRole("User"))
         {
-            @Html.AntiForgeryToken()
-            <div class="form-horizontal d-flex justify-content-center align-items-center">
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="row">
-                    <div class="col-xl-10 col-md-10 form-group mx-auto mb-xl-4 mb-lg-3">
-                        <div class="">
-                            @Html.TextAreaFor(model => model.Review.CustomerReview, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Review.CustomerReview, "", new { @class = "text-danger" })
+            using (Html.BeginForm("Save", "Reviews", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal d-flex justify-content-center align-items-center">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="row">
+                        <div class="col-xl-10 col-md-10 form-group mx-auto mb-xl-4 mb-lg-3">
+                            <div class="">
+                                @Html.TextAreaFor(model => model.Review.CustomerReview, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Review.CustomerReview, "", new { @class = "text-danger" })
+                            </div>
                         </div>
-                    </div>
-                    @Html.HiddenFor(model => model.Product.Id)
+                        @Html.HiddenFor(model => model.Product.Id)
 
-                    <div class="col-xl-10 col-md-10 form-group mx-auto mb-xl-4 mb-lg-3">
-                        <div class="">
-                            <input type="submit" value="Save" class="btn btn-success category-form-submit-btn w-100 mt-3" />
+                        <div class="col-xl-10 col-md-10 form-group mx-auto mb-xl-4 mb-lg-3">
+                            <div class="">
+                                <input type="submit" value="Save" class="btn btn-success category-form-submit-btn w-100 mt-3" />
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            }
         }
     </dl>
 </div>

@@ -64,19 +64,12 @@ namespace NBITTask.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = db.Products.Where(x => x.Id == Id).Include(x => x.Reviews).SingleOrDefault();
+            //Product product = db.Products.Where(x => x.Id == Id).Include(x => x.Reviews).SingleOrDefault();
+            Product product = db.Products.Where(x => x.Id == Id).SingleOrDefault();
+            List<Review> reviews = db.Reviews.Where(x => x.ProductId == Id).Include(x => x.User).ToList();
+
+            product.Reviews = reviews;
             productReviewVM.Product = product;
-            //productReviewVM.Review = product.Re;
-            //if (Id == null)
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
-            ////Product product = db.Products.Find(Id);
-            ////Product product = db.Products.Where(x => x.Id == Id).Include(x => x.Reviews).SingleOrDefault();
-            //if (product == null)
-            //{
-            //    return HttpNotFound();
-            //}
 
             return View(productReviewVM);
         }
