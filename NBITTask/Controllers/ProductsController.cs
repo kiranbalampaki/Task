@@ -68,6 +68,34 @@ namespace NBITTask.Controllers
             Product product = db.Products.Where(x => x.Id == Id).SingleOrDefault();
             List<Review> reviews = db.Reviews.Where(x => x.ProductId == Id).Include(x => x.User).ToList();
 
+            List<Rating> ratings = db.Rating.Where(x => x.ProductId == Id).ToList();
+            int totalrating = 0;
+            foreach (var item in ratings)
+            {
+                totalrating += item.ProductRating;
+            }
+
+            var averageRating = totalrating / ratings.Count;
+            string quality;
+            if (averageRating <= 1.6)
+            {
+                quality = "worst";
+            }
+            if (averageRating > 1.6 && averageRating <= 3.2)
+            {
+                quality = "bad";
+            }
+            if (averageRating > 3.2)
+            {
+                quality = "good";
+            }
+            else
+            {
+                quality = "Not Yet Rated";
+            }
+
+            ViewBag.quality = quality;
+
             product.Reviews = reviews;
             productReviewVM.Product = product;
 
