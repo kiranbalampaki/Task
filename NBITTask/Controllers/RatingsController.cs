@@ -19,18 +19,29 @@ namespace NBITTask.Controllers
         public ActionResult AddRating(int productRating, int productId)
         {
             Rating rating = new Rating();
-            rating.ProductRating = productRating;
-
-            var product = db.Products.Find(productId);
             var user = db.Users.Where(m => m.Email == User.Identity.Name).FirstOrDefault();
 
-            rating.Product = product;
-            rating.ProductId = product.Id;
-            rating.User = user;
-            rating.UserId = user.Id;
+            if (db.Rating.Where(x => x.ProductId == productId).Where(x => x.UserId == user.Id).Any())
+            {
+                rating = db.Rating.Where(x => x.ProductId == productId).Where(x => x.UserId == user.Id).FirstOrDefault();
+                rating.ProductRating = productRating;
+                db.SaveChanges();
+            }
+            else
+            {
+                rating.ProductRating = productRating;
 
-            db.Rating.Add(rating);
-            db.SaveChanges();
+                var product = db.Products.Find(productId);
+
+                rating.Product = product;
+                rating.ProductId = product.Id;
+                rating.User = user;
+                rating.UserId = user.Id;
+
+                db.Rating.Add(rating);
+                db.SaveChanges();
+            }
+
             return RedirectToAction("Details", "Product", productId);
             //return Json().ToList(), JsonRequestBehavior.AllowGet);
         }
