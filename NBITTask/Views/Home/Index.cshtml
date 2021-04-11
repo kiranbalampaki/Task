@@ -1,0 +1,60 @@
+﻿@{
+    @model IEnumerable<NBITTask.Models.Entities.Product>
+    ViewBag.Title = "Home Page";
+}
+<style>
+
+    .card {
+        border-radius: 0px;
+        background: #ffffff !important;
+        box-shadow: 0px 3px 10px -7px #00007F !important;
+        padding-bottom: 5px;
+        transition: all ease 0.5s;
+    }
+
+        .card:hover {
+            transform: scale(1.02);
+        }
+
+        .card:last-child {
+            margin-right: 0px;
+        }
+
+        .card img {
+            height: 200px;
+            overflow-x: hidden;
+        }
+
+    .card-text {
+        margin-top: 0px;
+        margin-bottom: 5px;
+    }
+</style>
+
+<div>
+    <section id='services' class="">
+        <div class="container">
+            <h2 class="text-center">Products</h2>
+            <div class="d-flex flex-wrap">
+                @foreach (var item in Model)
+                {
+                    <div class="col-4">
+                        <div class="card">
+                            @if (item.Image != null)
+                            {
+                                var base64 = Convert.ToBase64String(item.Image);
+                                var imageSrc = String.Format("data:image/gif;base64,{0}", base64);
+                                <img src='@imageSrc' alt="" />
+                            }
+                        <div class="card-body text-left">
+                            <a href="@Url.Action("Details", "Products", new { id = item.Id })" >
+                                <h5 class="card-title service-name">@item.Name</h5>
+                            </a>
+                        </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+</div>

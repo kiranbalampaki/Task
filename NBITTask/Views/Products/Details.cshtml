@@ -1,0 +1,57 @@
+﻿@model NBITTask.ViewModels.ProductReviewVM
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Product";
+}
+
+<h2>Details</h2>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayFor(model => model.Product.Name)
+        </dt>
+
+        <dd>
+            @{
+                var base64 = Convert.ToBase64String(Model.Product.Image);
+                var imageSrc = String.Format("data:image/gif;base64,{0}", base64);
+                <img src='@imageSrc' id="service-image" alt="" width="300" />
+            }
+        </dd>
+
+        @foreach (var item in Model.Product.Reviews)
+        {
+            <div>@item.CustomerReview</div>
+            <div>@item.User.Email</div>
+        }
+
+        @using (Html.BeginForm("Save", "Reviews", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal d-flex justify-content-center align-items-center">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="row">
+                    <div class="col-xl-10 col-md-10 form-group mx-auto mb-xl-4 mb-lg-3">
+                        <div class="">
+                            @Html.TextAreaFor(model => model.Review.CustomerReview, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Review.CustomerReview, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    @Html.HiddenFor(model => model.Product.Id)
+
+                    <div class="col-xl-10 col-md-10 form-group mx-auto mb-xl-4 mb-lg-3">
+                        <div class="">
+                            <input type="submit" value="Save" class="btn btn-success category-form-submit-btn w-100 mt-3" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </dl>
+</div>
+<p>
+    @*@Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |*@
+    @Html.ActionLink("Back to List", "Index")
+</p>
