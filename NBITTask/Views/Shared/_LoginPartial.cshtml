@@ -19,14 +19,12 @@
                 <div class="ml-2 d-flex justify-content-center align-items-center">
                     <h5 style="margin-top: 7px;">@user.Email</h5>
                     <a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+                    @if (User.IsInRole("SuperAdmin"))
+                    {
+                        <a class="navbar-item">@Html.ActionLink("Report", "Index", "Reports", routeValues: null, htmlAttributes: new { @class = "nav-link" })</a>
+                    }
                 </div>
             </div>
-        </li>
-        <li class="navbar-item d-lg-none">
-            <a class="nav-link" href="">Dashboard</a>
-        </li>
-        <li class="navbar-item d-lg-none">
-            <a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
         </li>
     }
 }

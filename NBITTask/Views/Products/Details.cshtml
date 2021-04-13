@@ -92,6 +92,21 @@
     .callout img {
         width: 100%;
     }
+
+    .rating > li:before {
+        content: "\2605";
+        color: #c7c5c5;
+        cursor: pointer;
+        font-size: 3em;
+    }
+
+    .rating:hover > li:before {
+        color: #FFD700;
+    }
+
+    .rating > li:hover ~ li:before {
+        color: #c7c5c5;
+    }
 </style>
 <section class="buy-grid container">
     <header class="header">
@@ -130,42 +145,46 @@
                 <h5>
                     Give a rating:
                 </h5>
-                <ul class="rating d-flex" style="list-style: none; font-size: 1.5em;">
-                    <li class="star" value="1"><i class="fa fa-star-o"></i></li>
-                    <li class="star" value="2"><i class="fa fa-star-o"></i></li>
-                    <li class="star" value="3"><i class="fa fa-star-o"></i></li>
-                    <li class="star" value="4"><i class="fa fa-star-o"></i></li>
-                    <li class="star" value="5"><i class="fa fa-star-o"></i></li>
+                <ul class="rating d-flex" style="list-style: none; font-size: 1em;">
+                    <li class="star" value="1"></li>
+                    <li class="star" value="2"></li>
+                    <li class="star" value="3"></li>
+                    <li class="star" value="4"></li>
+                    <li class="star" value="5"></li>
                 </ul>
+                @if (Model.userRating != null)
+                {
+                <span>You have rated <span style="color:#FFD700; font-weight: bold;">@Model.userRating</span> star.</span>
+                }
             </div>
         </div>
     }
-<div class="specs-table">
-    <h4>Reviews</h4>
-    @foreach (var item in Model.Product.Reviews)
-    {
-        <div class="specs-table-row">
-            <div class="spec-table-label pr-2">@item.CustomerReview</div>
-            <div class="spec-table-description">@item.User.Email @item.ReviewDateTime.ToShortDateString()</div>
-        </div>
-    }
-    @if (User.IsInRole("User"))
-    {
-        using (Html.BeginForm("Save", "Reviews", FormMethod.Post))
+    <div class="specs-table">
+        <h4>Reviews</h4>
+        @foreach (var item in Model.Product.Reviews)
         {
-            @Html.AntiForgeryToken()
             <div class="specs-table-row">
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="">
-                    @Html.TextAreaFor(model => model.Review.CustomerReview, new { @class = "form-control form-control-full", rows = 4, cols = 80 })
-                    @Html.ValidationMessageFor(model => model.Review.CustomerReview, "", new { @class = "text-danger" })
-                </div>
-                @Html.HiddenFor(model => model.Product.Id)
+                <div class="spec-table-label pr-2">@item.CustomerReview</div>
+                <div class="spec-table-description">@item.User.Email @item.ReviewDateTime.ToShortDateString()</div>
             </div>
-            <input type="submit" value="Save" class="btn btn-success" />
         }
-    }
-</div>
+        @if (User.IsInRole("User"))
+        {
+            using (Html.BeginForm("Save", "Reviews", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="specs-table-row">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="">
+                        @Html.TextAreaFor(model => model.Review.CustomerReview, new { @class = "form-control form-control-full", rows = 4, cols = 80 })
+                        @Html.ValidationMessageFor(model => model.Review.CustomerReview, "", new { @class = "text-danger" })
+                    </div>
+                    @Html.HiddenFor(model => model.Product.Id)
+                </div>
+                <input type="submit" value="Save" class="btn btn-success" />
+            }
+        }
+    </div>
 </section>
 @*<div>
 

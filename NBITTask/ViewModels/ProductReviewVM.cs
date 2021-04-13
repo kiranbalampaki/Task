@@ -10,5 +10,6 @@ namespace NBITTask.ViewModels
     {
         public Product Product { get; set; }
         public Review Review { get; set; }
+        public int? userRating { get; set; }
     }
 }

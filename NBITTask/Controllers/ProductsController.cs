@@ -67,8 +67,14 @@ namespace NBITTask.Controllers
             //Product product = db.Products.Where(x => x.Id == Id).Include(x => x.Reviews).SingleOrDefault();
             Product product = db.Products.Where(x => x.Id == Id).SingleOrDefault();
             List<Review> reviews = db.Reviews.Where(x => x.ProductId == Id).Include(x => x.User).ToList();
-
             List<Rating> ratings = db.Rating.Where(x => x.ProductId == Id).ToList();
+
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = db.Users.Where(m => m.Email == User.Identity.Name).FirstOrDefault();
+                var userRating = db.Rating.Where(x => x.ProductId == Id && x.UserId == user.Id).SingleOrDefault();
+                productReviewVM.userRating = userRating.ProductRating;
+            }
 
             if (ratings.Count != 0)
             {
