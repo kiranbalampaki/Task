@@ -22,6 +22,7 @@
                     @if (User.IsInRole("SuperAdmin"))
                     {
                         <a class="navbar-item">@Html.ActionLink("Report", "Index", "Reports", routeValues: null, htmlAttributes: new { @class = "nav-link" })</a>
+                        <a class="navbar-item">@Html.ActionLink("Products", "Save", "Products", routeValues: null, htmlAttributes: new { @class = "nav-link" })</a>
                     }
                 </div>
             </div>

@@ -73,7 +73,10 @@ namespace NBITTask.Controllers
             {
                 var user = db.Users.Where(m => m.Email == User.Identity.Name).FirstOrDefault();
                 var userRating = db.Rating.Where(x => x.ProductId == Id && x.UserId == user.Id).SingleOrDefault();
-                productReviewVM.userRating = userRating.ProductRating;
+                if (userRating != null)
+                {
+                    productReviewVM.userRating = userRating.ProductRating;
+                }
             }
 
             if (ratings.Count != 0)
