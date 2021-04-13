@@ -28,6 +28,7 @@ namespace NBITTask.Controllers
 
                 var product = db.Products.Find(productReviewVM.Product.Id);
                 review.Product = product;
+                int id = productReviewVM.Product.Id;
 
                 var user = db.Users.Where(m => m.Email == User.Identity.Name).FirstOrDefault();
                 review.UserId = user.Id;
@@ -36,7 +37,7 @@ namespace NBITTask.Controllers
 
                 db.Reviews.Add(review);
                 db.SaveChanges();
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Details", "Products", new { id = id });
             }
             catch
             {

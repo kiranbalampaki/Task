@@ -42,8 +42,12 @@ namespace NBITTask.Controllers
                 db.Rating.Add(rating);
                 db.SaveChanges();
             }
+            return Json(new
+            {
+                newUrl = Url.Action("Details", "Products", new { id = productId })
+            });
 
-            return RedirectToAction("Details", "Product", productId);
+            //return RedirectToAction("Details", "Product", new { id = productId });
             //return Json().ToList(), JsonRequestBehavior.AllowGet);
         }
     }

@@ -5,91 +5,242 @@
     ViewBag.Title = "Product";
 }
 
-<h2>Details</h2>
 <style>
     .star {
         margin: 0px 1px;
     }
+
+
+    img {
+        max-width: 100%;
+    }
+
+
+    .buy-grid {
+        padding-top: 3rem;
+        padding-bottom: 5rem;
+        display: grid;
+        grid-column-gap: 2rem;
+        grid-template-columns: 50% 50%;
+        grid-template-rows: auto;
+        grid-template-areas: "hero-image header" "hero-image selection" "hero-image specs"
+    }
+
+
+    header {
+        padding-bottom: 3rem;
+        grid-area: header;
+    }
+
+    h1 {
+        margin: 0;
+    }
+
+
+
+    .hero-image-wrapper {
+        grid-area: hero-image;
+        height: 100%;
+    }
+
+    .selection {
+        grid-area: selection;
+        padding-bottom: 3rem;
+    }
+
+
+    .selection-row {
+        padding-bottom: 2rem;
+    }
+
+    .swatch {
+        width: 36px;
+        height: 36px;
+        background-color: #ededed;
+        text-align: center;
+        line-height: 36px;
+        display: inline-block;
+        margin: 8px;
+        cursor: pointer;
+    }
+
+
+    .btn-primary {
+        width: 100%;
+        display: block;
+    }
+
+    .specs-table {
+        padding-bottom: 3rem;
+    }
+
+    .specs-table-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-top: 1px solid #ccc;
+    }
+
+    .spec-table-label {
+        font-weight: 700;
+    }
+
+    .spec-table-description {
+        color: #999;
+    }
+
+    .callout img {
+        width: 100%;
+    }
 </style>
+<section class="buy-grid container">
+    <header class="header">
+        <h1 class="mb-2">@Model.Product.Name</h1>
+        @Html.HiddenFor(model => model.Product.Id, new { @class = "productId" })
+        <span style="color: #FFD700; font-size: 1.3em;">
+            @{
+                var rating = ViewBag.averageRating;
 
-<div>
-
-    <ul class="rating d-flex" style="list-style: none;">
-        <li class="star" value="1"><i class="fa fa-star"></i></li>
-        <li class="star" value="2"><i class="fa fa-star"></i></li>
-        <li class="star" value="3"><i class="fa fa-star"></i></li>
-        <li class="star" value="4"><i class="fa fa-star"></i></li>
-        <li class="star" value="5"><i class="fa fa-star"></i></li>
-    </ul>
-
-    @{
-        var rating = ViewBag.averageRating;
-
-        for (int i = 1; i <= 5; i++)
+                for (int i = 1; i <= 5; i++)
+                {
+                    if (i <= rating)
+                    {
+                        <i class="fa fa-star"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-star-o"></i>
+                    }
+                }
+            }
+        </span>
+        <span class="ml-4 font-weight-bold">@ViewBag.quality</span>
+    </header>
+    <div class="hero-image-wrapper">
+        @{
+            var base64 = Convert.ToBase64String(Model.Product.Image);
+            var imageSrc = String.Format("data:image/gif;base64,{0}", base64);
+            <img src='@imageSrc' class="hero-image-element" alt="alt" />
+        }
+    </div>
+    @if (User.IsInRole("User"))
+    {
+        <div class="selection">
+            <div class="selection-row">
+                <h5>
+                    Give a rating:
+                </h5>
+                <ul class="rating d-flex" style="list-style: none; font-size: 1.5em;">
+                    <li class="star" value="1"><i class="fa fa-star-o"></i></li>
+                    <li class="star" value="2"><i class="fa fa-star-o"></i></li>
+                    <li class="star" value="3"><i class="fa fa-star-o"></i></li>
+                    <li class="star" value="4"><i class="fa fa-star-o"></i></li>
+                    <li class="star" value="5"><i class="fa fa-star-o"></i></li>
+                </ul>
+            </div>
+        </div>
+    }
+<div class="specs-table">
+    <h4>Reviews</h4>
+    @foreach (var item in Model.Product.Reviews)
+    {
+        <div class="specs-table-row">
+            <div class="spec-table-label pr-2">@item.CustomerReview</div>
+            <div class="spec-table-description">@item.User.Email @item.ReviewDateTime.ToShortDateString()</div>
+        </div>
+    }
+    @if (User.IsInRole("User"))
+    {
+        using (Html.BeginForm("Save", "Reviews", FormMethod.Post))
         {
-            if (i <= rating)
-            {
-                <i class="fa fa-star"></i>
-            }
-            else
-            {
-                <i class="fa fa-star-o"></i>
-            }
-            //rating--;
+            @Html.AntiForgeryToken()
+            <div class="specs-table-row">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="">
+                    @Html.TextAreaFor(model => model.Review.CustomerReview, new { @class = "form-control form-control-full", rows = 4, cols = 80 })
+                    @Html.ValidationMessageFor(model => model.Review.CustomerReview, "", new { @class = "text-danger" })
+                </div>
+                @Html.HiddenFor(model => model.Product.Id)
+            </div>
+            <input type="submit" value="Save" class="btn btn-success" />
         }
     }
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayFor(model => model.Product.Name)
-        </dt>
-        @Html.HiddenFor(model => model.Product.Id, new { @class = "productId" })
-        <dd>
-            @{
-                var base64 = Convert.ToBase64String(Model.Product.Image);
-                var imageSrc = String.Format("data:image/gif;base64,{0}", base64);
-                <img src='@imageSrc' id="service-image" alt="" width="300" />
-            }
-        </dd>
-        @ViewBag.quality
+</div>
+</section>
+@*<div>
 
-        @foreach (var item in Model.Product.Reviews)
-        {
-            <div>@item.CustomerReview</div>
-            <div>@item.User.Email</div>
-            <div>@item.ReviewDateTime</div>
-        }
+        <ul class="rating d-flex" style="list-style: none;">
+            <li class="star" value="1"><i class="fa fa-star"></i></li>
+            <li class="star" value="2"><i class="fa fa-star"></i></li>
+            <li class="star" value="3"><i class="fa fa-star"></i></li>
+            <li class="star" value="4"><i class="fa fa-star"></i></li>
+            <li class="star" value="5"><i class="fa fa-star"></i></li>
+        </ul>
 
-        @if (User.IsInRole("User"))
-        {
-            using (Html.BeginForm("Save", "Reviews", FormMethod.Post))
+        @{
+            var rating = ViewBag.averageRating;
+
+            for (int i = 1; i <= 5; i++)
             {
-                @Html.AntiForgeryToken()
-                <div class="form-horizontal d-flex justify-content-center align-items-center">
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                    <div class="row">
-                        <div class="col-xl-10 col-md-10 form-group mx-auto mb-xl-4 mb-lg-3">
-                            <div class="">
-                                @Html.TextAreaFor(model => model.Review.CustomerReview, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.Review.CustomerReview, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-                        @Html.HiddenFor(model => model.Product.Id)
+                if (i <= rating)
+                {
+                    <i class="fa fa-star"></i>
+                }
+                else
+                {
+                    <i class="fa fa-star-o"></i>
+                }
+                //rating--;
+            }
+        }
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayFor(model => model.Product.Name)
+            </dt>
+            @Html.HiddenFor(model => model.Product.Id, new { @class = "productId" })
+            <dd>
+                @{
+                    var base64 = Convert.ToBase64String(Model.Product.Image);
+                    var imageSrc = String.Format("data:image/gif;base64,{0}", base64);
+                    <img src='@imageSrc' id="service-image" alt="" width="300" />
+                }
+            </dd>
+            @ViewBag.quality
 
-                        <div class="col-xl-10 col-md-10 form-group mx-auto mb-xl-4 mb-lg-3">
-                            <div class="">
-                                <input type="submit" value="Save" class="btn btn-success category-form-submit-btn w-100 mt-3" />
+            @foreach (var item in Model.Product.Reviews)
+            {
+                <div>@item.CustomerReview</div>
+                <div>@item.User.Email</div>
+                <div>@item.ReviewDateTime</div>
+            }
+
+            @if (User.IsInRole("User"))
+            {
+                using (Html.BeginForm("Save", "Reviews", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal d-flex justify-content-center align-items-center">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="row">
+                            <div class="col-xl-10 col-md-10 form-group mx-auto mb-xl-4 mb-lg-3">
+                                <div class="">
+                                    @Html.TextAreaFor(model => model.Review.CustomerReview, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Review.CustomerReview, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            @Html.HiddenFor(model => model.Product.Id)
+
+                            <div class="col-xl-10 col-md-10 form-group mx-auto mb-xl-4 mb-lg-3">
+                                <div class="">
+                                    <input type="submit" value="Save" class="btn btn-success category-form-submit-btn w-100 mt-3" />
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
             }
-        }
-    </dl>
-</div>
-<p>
-    @*@Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |*@
-    @Html.ActionLink("Back to List", "Index")
-</p>
+        </dl>
+    </div>*@
 
 <script src="~/Scripts/jquery-3.4.1.js"></script>
 <script>
@@ -104,18 +255,19 @@
     //    var value = $(this).prevAll().length;
     //    alert($(this).prevAll().length + 1);
     //});
-
+    debugger
     $(".rating li").click(function () {
         debugger
         var value = $(this).prevAll().length + 1;
         var productId = $(".productId").val();
 
         $.ajax({
+            async: false,
             type: "POST",
             url: "/Ratings/AddRating",
             data: { 'productRating': value, 'productId': productId },
             success: function (data) {
-                console.log("success");
+                window.location.replace(data.newUrl);
             }
         });
     })

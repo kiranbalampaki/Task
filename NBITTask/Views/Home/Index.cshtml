@@ -32,51 +32,55 @@
 </style>
 
 <div>
-    <section id='services' class="">
+
+    <section id='services' class="mt-5">
         <div class="container">
             <h2 class="text-center">Products</h2>
-            <div class="d-flex flex-wrap">
-                @foreach (var item in Model)
-                {
-                    <div class="col-4">
-                        <div class="card">
-                            <div class="d-flex">
-                                @{
-                                    var averageRating = 0;
-                                    foreach (var rate in item.Ratings)
-                                    {
-                                        averageRating += rate.ProductRating;
-                                    }
-                                    var rating = averageRating;
-
-                                    for (int i = 1; i <= 5; i++)
-                                    {
-                                        if (i <= rating)
-                                        {
-                                            <i class="fa fa-star"></i>
-                                        }
-                                        else
-                                        {
-                                            <i class="fa fa-star-o"></i>
-                                        }
-                                        //rating--;
-                                    }
+            <div class="row-col">
+                <div class="card-group mx-auto">
+                    @foreach (var item in Model)
+                    {
+                        <div class="col-12 col-md-4 col-lg-4 col-12 p-0 pb-4 p-md-1 p-lg-4">
+                            <div class="card">
+                                @if (item.Image != null)
+                                {
+                                    var base64 = Convert.ToBase64String(item.Image);
+                                    var imageSrc = String.Format("data:image/gif;base64,{0}", base64);
+                                    <img src='@imageSrc' alt="" class="" />
                                 }
-                            </div>
-                            @if (item.Image != null)
-                            {
-                                var base64 = Convert.ToBase64String(item.Image);
-                                var imageSrc = String.Format("data:image/gif;base64,{0}", base64);
-                                <img src='@imageSrc' alt="" />
-                            }
-                            <div class="card-body text-left">
-                                <a href="@Url.Action("Details", "Products", new { id = item.Id })">
+                                <div class="card-body text-left">
                                     <h5 class="card-title service-name">@item.Name</h5>
-                                </a>
+                                    <span>
+                                        @{
+                                            var averageRating = 0;
+                                            foreach (var rate in item.Ratings)
+                                            {
+                                                averageRating += rate.ProductRating;
+                                            }
+                                            var rating = averageRating;
+
+                                            for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i <= rating)
+                                                {
+                                                    <i class="fa fa-star"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="fa fa-star-o"></i>
+                                                }
+                                            }
+                                        }
+                                    </span>
+                                    <a href="@Url.Action("Details", "Products", new { id = item.Id })" class="btn btn-dark w-100 mt-2">
+                                        View Details
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                }
+                    }
+
+                </div>
             </div>
         </div>
     </section>

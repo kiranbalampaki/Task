@@ -1,0 +1,23 @@
+﻿@{
+    @model IEnumerable<NBITTask.Models.Entities.Product>
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td> 
+            </tr>
+        }
+    </tbody>
+</table>
+
